@@ -3,37 +3,25 @@ import { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { useCallback } from 'react';
 import './HeroesFilters.scss';
-import {
-  filtersFetching,
-  filtersFetched,
-  filtersFetchingError,
-  heroesFiltration,
-} from '../../actions';
-import { useHttp } from '../../hooks/http.hook';
-import { activeHeroSelector, filtersSelector } from '../../selectors';
+import { getFiltersThunk } from '../../redux/filtersSlice/filtersThunk';
+import { filtrationHeroes } from '../../redux/heroesSlice/heroesSlice';
+import { filtersSelector } from '../../redux/filtersSlice/filtersSelector';
+import { activeHeroSelector } from '../../redux/heroesSlice/heroesSelector';
 
 const HeroesFilters = () => {
   const filters = useSelector(filtersSelector);
   const active = useSelector(activeHeroSelector);
 
-  const { request } = useHttp();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (filters.length < 1) getFilters();
+    if (filters.length < 1) dispatch(getFiltersThunk());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getFilters = () => {
-    filtersFetching();
-    request('http://localhost:3001/filters')
-      .then(d => dispatch(filtersFetched(d)))
-      .catch(() => dispatch(filtersFetchingError()));
-  };
-
   const handleSetActiveFilter = useCallback(
     e => {
-      dispatch(heroesFiltration(e.target.dataset.type));
+      dispatch(filtrationHeroes(e.target.dataset.type));
     },
     [dispatch]
   );

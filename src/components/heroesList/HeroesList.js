@@ -1,30 +1,23 @@
-import { useHttp } from '../../hooks/http.hook';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import {
-  heroesFetching,
-  heroesFetched,
-  heroesFetchingError,
-} from '../../actions';
 import HeroesListItem from '../heroesListItem/HeroesListItem';
 import Spinner from '../spinner/Spinner';
 import './HeroesList.scss';
-import { filtredHeroesSelector, heroesStatus } from '../../selectors';
+import {
+  filtredHeroesSelector,
+  heroesStatus,
+} from '../../redux/heroesSlice/heroesSelector';
+import { getHeroesThunk } from '../../redux/heroesSlice/heroesThunk';
 
 const HeroesList = () => {
   const dispatch = useDispatch();
-  const { request } = useHttp();
   const heroesLoadingStatus = useSelector(heroesStatus);
   const filtredHeroes = useSelector(filtredHeroesSelector);
 
   useEffect(() => {
-    dispatch(heroesFetching());
-    request('http://localhost:3001/heroes')
-      .then(data => dispatch(heroesFetched(data)))
-      .catch(() => dispatch(heroesFetchingError()));
-
+    dispatch(getHeroesThunk());
     // eslint-disable-next-line
   }, []);
 

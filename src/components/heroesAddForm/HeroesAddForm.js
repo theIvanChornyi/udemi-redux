@@ -1,21 +1,14 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { v4 as uuid } from 'uuid';
-import {
-  heroCreate,
-  heroCreated,
-  heroCreateError,
-  filtersFetching,
-  filtersFetched,
-  filtersFetchingError,
-} from '../../actions';
-import { useHttp } from '../../hooks/http.hook';
-import { filtersSelector } from '../../selectors';
+import { filtersSelector } from '../../redux/filtersSlice/filtersSelector';
+
+import { getFiltersThunk } from '../../redux/filtersSlice/filtersThunk';
+import { heroesCreateThunk } from '../../redux/heroesSlice/heroesThunk';
 import { schema } from '../../services/formValidate/schema';
 
 const HeroesAddForm = () => {
-  const { request } = useHttp();
   const filters = useSelector(filtersSelector);
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm({
@@ -23,31 +16,20 @@ const HeroesAddForm = () => {
   });
 
   useEffect(() => {
-    if (filters.length < 1) getFilters();
+    if (filters.length < 1) dispatch(getFiltersThunk());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getFilters = () => {
-    dispatch(filtersFetching());
-    request('http://localhost:3001/filters')
-      .then(d => dispatch(filtersFetched(d)))
-      .catch(() => dispatch(filtersFetchingError()));
-  };
-
   const onSubmit = ({ name, text, element }) => {
     const hero = {
-      id: uuid(),
+      id: nanoid(),
       name,
       description: text,
       element,
     };
-    dispatch(heroCreate());
     const body = JSON.stringify(hero);
-    request('http://localhost:3001/heroes', 'POST', body)
-      .then(dispatch(heroCreated(hero)))
-      .catch(() => {
-        dispatch(heroCreateError());
-      });
+    dispatch(heroesCreateThunk(body));
+
     reset();
   };
 

@@ -1,9 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { heroDelete, heroDeleted, heroDeleteError } from '../../actions';
-import { useHttp } from '../../hooks/http.hook';
+import { heroesDeleteThunk } from '../../redux/heroesSlice/heroesThunk';
 
 const HeroesListItem = ({ name, description, element, id }) => {
-  const { request } = useHttp();
   const dispatch = useDispatch();
 
   let elementClassName;
@@ -27,12 +25,7 @@ const HeroesListItem = ({ name, description, element, id }) => {
 
   const handleDeleteHero = e => {
     const { id } = e.target?.dataset;
-    dispatch(heroDelete());
-    request(`http://localhost:3001/heroes/${id}`, 'DELETE')
-      .then(dispatch(heroDeleted(id)))
-      .catch(() => {
-        dispatch(heroDeleteError());
-      });
+    dispatch(heroesDeleteThunk(id));
   };
 
   return (

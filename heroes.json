@@ -1,33 +1,9 @@
 {
   "heroes": [
     {
-      "id": "fa990d12-f380-449d-8361-ad65e47f3e77",
-      "name": "qwe",
-      "description": "qwe",
-      "element": "wind"
-    },
-    {
-      "id": "fe524b61-88fa-4623-abbd-3d02a8f45553",
-      "name": "qwe",
-      "description": "qwe",
-      "element": "fire"
-    },
-    {
-      "id": "24a5ddfc-3ad3-4f92-b07b-0f1117b9b947",
-      "name": "qwe",
-      "description": "qwe",
-      "element": "fire"
-    },
-    {
-      "id": "9227b0d5-5d7e-499a-8956-50b50a69b663",
-      "name": "qew",
-      "description": "qwe",
-      "element": "fire"
-    },
-    {
-      "id": "cdd06ca2-8c93-4759-a5ec-dd13a1175329",
-      "name": "qwe",
-      "description": "qwe",
+      "id": "YXJ7RvXYxWfszKG1V2eVP",
+      "name": "qe",
+      "description": "qe",
       "element": "fire"
     }
   ],
