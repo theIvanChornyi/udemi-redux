@@ -11,11 +11,12 @@ import {
   filtersFetchingError,
 } from '../../actions';
 import { useHttp } from '../../hooks/http.hook';
+import { filtersSelector } from '../../selectors';
 import { schema } from '../../services/formValidate/schema';
 
 const HeroesAddForm = () => {
   const { request } = useHttp();
-  const filters = useSelector(state => state.filters);
+  const filters = useSelector(filtersSelector);
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm({
     resolver: schema,

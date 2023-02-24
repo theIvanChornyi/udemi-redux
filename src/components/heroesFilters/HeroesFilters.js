@@ -10,10 +10,11 @@ import {
   heroesFiltration,
 } from '../../actions';
 import { useHttp } from '../../hooks/http.hook';
+import { activeHeroSelector, filtersSelector } from '../../selectors';
 
 const HeroesFilters = () => {
-  const filters = useSelector(state => state.filters);
-  const active = useSelector(state => state.active);
+  const filters = useSelector(filtersSelector);
+  const active = useSelector(activeHeroSelector);
 
   const { request } = useHttp();
   const dispatch = useDispatch();

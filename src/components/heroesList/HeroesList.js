@@ -1,5 +1,5 @@
 import { useHttp } from '../../hooks/http.hook';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -11,13 +11,13 @@ import {
 import HeroesListItem from '../heroesListItem/HeroesListItem';
 import Spinner from '../spinner/Spinner';
 import './HeroesList.scss';
+import { filtredHeroesSelector, heroesStatus } from '../../selectors';
 
 const HeroesList = () => {
   const dispatch = useDispatch();
   const { request } = useHttp();
-  const { heroes, heroesLoadingStatus } = useSelector(state => state);
-  const active = useSelector(state => state.active);
-  const [filtredHeroes, setFiltredHeroes] = useState(heroes);
+  const heroesLoadingStatus = useSelector(heroesStatus);
+  const filtredHeroes = useSelector(filtredHeroesSelector);
 
   useEffect(() => {
     dispatch(heroesFetching());
@@ -27,16 +27,6 @@ const HeroesList = () => {
 
     // eslint-disable-next-line
   }, []);
-
-  useEffect(
-    () =>
-      setFiltredHeroes(
-        heroes.filter(({ element }) =>
-          active === 'all' ? true : element === active
-        )
-      ),
-    [active, heroes]
-  );
 
   if (heroesLoadingStatus === 'loading') {
     return <Spinner />;

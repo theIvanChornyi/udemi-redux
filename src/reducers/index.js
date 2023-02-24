@@ -1,11 +1,14 @@
-const initialState = {
+const heroesInitialState = {
   heroes: [],
   heroesLoadingStatus: 'idle',
-  filters: [],
   active: 'all',
 };
+const filtersInitialState = {
+  LoadingStatus: 'idle',
+  filters: [],
+};
 
-const reducer = (state = initialState, action) => {
+export const heroes = (state = heroesInitialState, action) => {
   switch (action.type) {
     //<------FILTRATION------>
     case 'HEROES_FILTRATION':
@@ -28,25 +31,6 @@ const reducer = (state = initialState, action) => {
         heroesLoadingStatus: 'idle',
       };
     case 'HEROES_FETCHING_ERROR':
-      return {
-        ...state,
-        heroesLoadingStatus: 'error',
-      };
-
-    //<------filters------>
-
-    case 'FILTERS_FETCHING':
-      return {
-        ...state,
-        heroesLoadingStatus: 'loading',
-      };
-    case 'FILTERS_FETCHED':
-      return {
-        ...state,
-        filters: action.payload,
-        heroesLoadingStatus: 'idle',
-      };
-    case 'FILTERS_FETCHING_ERROR':
       return {
         ...state,
         heroesLoadingStatus: 'error',
@@ -76,13 +60,11 @@ const reducer = (state = initialState, action) => {
     case 'HERO_CREATE':
       return {
         ...state,
-        heroesLoadingStatus: 'loading',
       };
     case 'HERO_CREATED':
       return {
         ...state,
-        heroes: [...state.heroes, action.payload],
-        heroesLoadingStatus: 'idle',
+        heroes: state.heroes.concat([action.payload]),
       };
     case 'HERO_CREATE_ERROR':
       return {
@@ -95,4 +77,28 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export default reducer;
+export const filters = (state = filtersInitialState, action) => {
+  switch (action.type) {
+    //<------FETCHING------>
+
+    case 'FILTERS_FETCHING':
+      return {
+        ...state,
+        LoadingStatus: 'loading',
+      };
+    case 'FILTERS_FETCHED':
+      return {
+        ...state,
+        filters: action.payload,
+        LoadingStatus: 'idle',
+      };
+    case 'FILTERS_FETCHING_ERROR':
+      return {
+        ...state,
+        LoadingStatus: 'error',
+      };
+
+    default:
+      return state;
+  }
+};
