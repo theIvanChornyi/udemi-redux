@@ -1,7 +1,5 @@
 import { filterAdapter } from './filtersSlice';
 
-const { selectAll: filtersSelector } = filterAdapter.getSelectors(
-  state => state.filters
-);
+const filterSelectors = filterAdapter.getSelectors(state => state.filters);
 
-export { filtersSelector };
+export const filtersSelector = filterSelectors.selectAll;
