@@ -1,17 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import {
   getHeroesThunk,
   heroesCreateThunk,
   heroesDeleteThunk,
 } from './heroesThunk';
 
+export const heroesAdapter = createEntityAdapter();
+
+const initialState = heroesAdapter.getInitialState({
+  heroesLoadingStatus: 'idle',
+  active: 'all',
+});
+
 const heroesSlice = createSlice({
   name: 'heroes',
-  initialState: {
-    heroes: [],
-    heroesLoadingStatus: 'idle',
-    active: 'all',
-  },
+  initialState,
   reducers: {
     filtrationHeroes(state, action) {
       state.active = action.payload;
@@ -23,21 +26,21 @@ const heroesSlice = createSlice({
     });
     builder.addCase(getHeroesThunk.fulfilled, (state, action) => {
       state.heroesLoadingStatus = 'idle';
-      state.heroes = action.payload;
+      heroesAdapter.setAll(state, action.payload);
     });
     builder.addCase(getHeroesThunk.rejected, state => {
       state.heroesLoadingStatus = 'error';
     });
 
     builder.addCase(heroesCreateThunk.fulfilled, (state, action) => {
-      state.heroes = state.heroes.concat([action.payload]);
+      heroesAdapter.addOne(state, action.payload);
     });
     builder.addCase(heroesCreateThunk.rejected, state => {
       state.heroesLoadingStatus = 'error';
     });
 
     builder.addCase(heroesDeleteThunk.fulfilled, (state, action) => {
-      state.heroes = state.heroes.filter(({ id }) => id !== action.payload);
+      heroesAdapter.removeOne(state, action.payload);
     });
     builder.addCase(heroesDeleteThunk.rejected, state => {
       state.heroesLoadingStatus = 'error';

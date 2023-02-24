@@ -1,20 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import { getFiltersThunk } from './filtersThunk';
+
+export const filterAdapter = createEntityAdapter();
+const initialState = filterAdapter.getInitialState({ LoadingStatus: 'idle' });
 
 const filtersSlice = createSlice({
   name: 'filters',
-  initialState: {
-    LoadingStatus: 'idle',
-    filters: [],
-  },
-
+  initialState,
   extraReducers: builder => {
     builder.addCase(getFiltersThunk.pending, state => {
       state.LoadingStatus = 'loading';
     });
     builder.addCase(getFiltersThunk.fulfilled, (state, action) => {
       state.LoadingStatus = 'idle';
-      state.filters = action.payload;
+      filterAdapter.setAll(state, action.payload);
     });
     builder.addCase(getFiltersThunk.rejected, state => {
       state.LoadingStatus = 'error';
