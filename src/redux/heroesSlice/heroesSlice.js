@@ -30,14 +30,14 @@ const heroesSlice = createSlice({
     });
 
     builder.addCase(heroesCreateThunk.fulfilled, (state, action) => {
-      state.heroes.concat([action.payload]);
+      state.heroes = state.heroes.concat([action.payload]);
     });
     builder.addCase(heroesCreateThunk.rejected, state => {
       state.heroesLoadingStatus = 'error';
     });
 
     builder.addCase(heroesDeleteThunk.fulfilled, (state, action) => {
-      state.heroes.filter(({ id }) => id !== action.payload);
+      state.heroes = state.heroes.filter(({ id }) => id !== action.payload);
     });
     builder.addCase(heroesDeleteThunk.rejected, state => {
       state.heroesLoadingStatus = 'error';
